@@ -1,10 +1,19 @@
-const PlayerPage = async () => {
+import styles from "./player.module.css";
+import AudioBrowser from "@/components/audioBrowser/audioBrowser";
+import AudioPlayer from "@/components/audioPlayer/audioPlayer";
 
+const PlayerPage = async () => {
     return (
         <div>
-            <h1>Player</h1>
-            <audio controls src="http://localhost:3000/api/stream/4"></audio>
+
+            {/* Browser/Player */}
+            <div className={styles.container}>
+                <AudioBrowser />
+                <AudioPlayer />
+            </div>
+
         </div>
+
     );
 };
 
