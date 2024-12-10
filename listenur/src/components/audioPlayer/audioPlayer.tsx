@@ -10,7 +10,7 @@ const AudioPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
-
+    
     // References
     const audioPlayer:any = useRef();
     const progressBar:any = useRef();
