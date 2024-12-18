@@ -1,62 +1,9 @@
-.audioPlayer {
-    --primary: #F40082;
-    --secondary: #FFD200;
-
-    align-items: center;
-    display: flex;
-    width: 700px;
-}
-
-.forwardBackward {
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    font-family: monospace;
-    font-size: 16px;
-    cursor: pointer;
-
-    color: var(--foreground);
-}
-
-.forwardBackward:hover {
-    color: var(--primary);
-}
-
-.playPause {
-    background: var(--primary);
-    border: none;
-    border-radius: 50%;
-    width: 75px;
-    height: 75px;
-    font-size: 32px;
-    color: var(--secondary);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.play {
-   position: relative;
-   left: 5px;
-}
-
-.currentTime, .duration {
-    font-family: monospace;
-    font-size: 16px;
-}
-
-.currentTime {
-    margin-left: 25px;
-}
-
 .progressBar {
-    --bar-bg: #FFE3D4;
+    --bar-bg: #d1d5db;
     --seek-before-width: 0;
-    --seek-before-color: #FFC2A1;
-    --knobby: #3452A5;
-    --selectedKnobby: #26C9C3;
+    --seek-before-color: #0d9488;
+    --knobby: #FFF;
+    --selectedKnobby: #059669;
 
     appearance: none;
     background: var(--bar-bg);
