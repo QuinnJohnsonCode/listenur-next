@@ -100,8 +100,8 @@ const AudioPlayer = () => {
                 src="/album-covers/album-cover.jpg"
                 alt="Album Cover"
                 className="rounded-md border-2 border-gray-600 shadow-md"
-                width={400}
-                height={400}
+                width={600}
+                height={600}
                 />
             </div>
             <div className="text-center mb-4">
