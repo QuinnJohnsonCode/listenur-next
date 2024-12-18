@@ -10,27 +10,6 @@ const AudioBrowser = () => {
                     <div className="text-gray-300">Album</div>
                     <div className="text-gray-300">Duration</div>
                 </li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 2</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 3</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 4</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 2</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 3</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 4</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 2</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 3</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 4</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 3</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 4</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
-                <li className="p-3 bg-gray-600 rounded hover:bg-teal-600 cursor-pointer transition-colors">Song 5</li>
             </ul>
         </div>
     );

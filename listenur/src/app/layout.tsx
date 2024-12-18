@@ -22,10 +22,10 @@ export default function RootLayout({
         {/* Header */}
         <Header />
 
-        {/* <!-- Main Content --> */}
+        {/* Main Content */}
         {children}
 
-        {/* <!-- Footer --> */}
+        {/* Footer */}
         <Footer />
       </body>
     </html>
