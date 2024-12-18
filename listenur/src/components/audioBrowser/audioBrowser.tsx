@@ -1,6 +1,6 @@
 import styles from "./audioBrowser.module.css";
 import Image from "next/image";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaBars } from "react-icons/fa";
 
 const AudioBrowser = () => {
     return (
@@ -59,7 +59,14 @@ const AudioBrowser = () => {
                     <div className="text-gray-300">20,000 Watt R.S.L</div>
 
                     {/* Duration */}
-                    <div className="text-gray-300">3:45</div>
+                    <div className="text-gray-300 flex items-center gap-6">
+                        <div>
+                            3:45
+                        </div>
+                        <div>
+                            <FaBars />
+                        </div>
+                    </div>
                 </li>
             </ul>
 
