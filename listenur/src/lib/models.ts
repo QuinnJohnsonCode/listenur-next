@@ -5,6 +5,7 @@ const artistSchema: Schema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
+            unique: true,
         },
         description: String,
     }
@@ -29,7 +30,7 @@ const albumSchema: Schema = new mongoose.Schema(
         title: {
             type: String,
             required: true,
-            index: true,
+            unique: true,
         },
 
         cover: {
@@ -48,6 +49,7 @@ const genreSchema: Schema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
+            unique: true,
         },
     }
 );

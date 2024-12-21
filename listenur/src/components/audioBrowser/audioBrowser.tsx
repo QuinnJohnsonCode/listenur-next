@@ -1,12 +1,17 @@
 import styles from "./audioBrowser.module.css";
 import Image from "next/image";
 import { FaPlay, FaBars } from "react-icons/fa";
+import ScanButton from "@/components/audioBrowser/scanButton/scanButton";
 
-const AudioBrowser = () => {
+
+const AudioBrowser = async () => {
     return (
         <div className="bg-gray-700 rounded-lg shadow-lg p-6 flex flex-col h-full">
             {/* Header */}
-            <h2 className="text-2xl font-semibold mb-4 text-teal-300">Browse</h2>
+            <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold mb-4 text-teal-300">Browse</h2>
+                <ScanButton />
+            </div>
             
             {/* Table Headings */}
             <div className="grid grid-cols-[90px_2fr_2fr_80px] gap-4 px-5 text-gray-300 text-sm pb-2">
