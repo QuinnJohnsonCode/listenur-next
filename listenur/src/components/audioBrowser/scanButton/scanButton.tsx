@@ -1,6 +1,6 @@
 "use client";
 import { MdLoop } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const startScan = async () => {
     // Request a scan from server
@@ -24,9 +24,27 @@ const ScanButton = () => {
     // Will store the response data in response
     const scanButtonClick = async () => {
         const data = await startScan();
-        console.log(data)
         setResponse(data);
     };
+    
+    // Connect to SSE api endpoint
+    useEffect(() => {
+        const eventSource = new EventSource("http://localhost:3000/api/scan/notify");
+
+        eventSource.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log(data);
+        };
+    
+        eventSource.onerror = (error) => {
+            console.error("SSE error:", error);
+            eventSource.close();
+        };
+
+        return () => {
+            eventSource.close();
+        }; 
+    }, [])
 
     return (
         <div>
