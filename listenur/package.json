@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@root/walk": "^1.1.0",
     "lodash": "^4.17.21",
     "mongoose": "^8.9.2",
     "music-metadata": "^10.6.4",
