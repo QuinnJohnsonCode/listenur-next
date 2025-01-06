@@ -20,6 +20,7 @@ const startScan = async () => {
 
 const ScanButton = () => {
     const [response, setResponse] = useState(null);
+    const [isScanning, setIsScanning] = useState(false);
 
     // Will store the response data in response
     const scanButtonClick = async () => {
@@ -31,25 +32,46 @@ const ScanButton = () => {
     useEffect(() => {
         const eventSource = new EventSource("http://localhost:3000/api/scan/notify");
 
+        eventSource.onopen = () => {
+            console.log("Connected to message server!");
+        }
+
         eventSource.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            console.log(data);
+
+            // Change local state of a scan
+            if (data.state == "INACTIVE") {
+                setIsScanning(false);
+            } else if (data.state == "SCANNING") {
+                setIsScanning(true);
+            }
         };
     
         eventSource.onerror = (error) => {
             console.error("SSE error:", error);
             eventSource.close();
         };
+        
+        // Fixes interrupt error on FF
+        window.onbeforeunload = () => {
+            eventSource.close();
+        };
 
         return () => {
             eventSource.close();
         }; 
-    }, [])
+    }, []);
+
+
 
     return (
         <div>
-            <button onClick={scanButtonClick}>
-                <MdLoop className="h-6 w-6 hover:text-teal-600 cursor-pointer transition-colors" />
+            <button disabled={isScanning} onClick={scanButtonClick}>
+                { isScanning ?
+                    <MdLoop className="h-6 w-6 animate-spin opacity-50" />
+                    :
+                    <MdLoop className="h-6 w-6 hover:text-teal-600 cursor-pointer transition-colors" />
+                }
             </button>
         </div>
     );
