@@ -7,21 +7,6 @@ const artistSchema: Schema = new mongoose.Schema(
             required: true,
             unique: true,
         },
-        description: String,
-    }
-);
-
-const albumCoverSchema: Schema = new mongoose.Schema(
-    {
-        data: {
-            type: Buffer,
-            required: true,
-        },
-        imageType: {
-            type: String,
-            required: true,
-            enum: ["jpeg", "png", "gif"],
-        },
     }
 );
 
@@ -33,14 +18,13 @@ const albumSchema: Schema = new mongoose.Schema(
             unique: true,
         },
 
-        cover: {
-            type: Schema.Types.ObjectId,
-            ref: "AlbumCover",
+        data: {
+            type: String,
         },
-        artist: {
-            type: Schema.Types.ObjectId,
-            ref: "Artist",
-        }
+        
+        imageType: {
+            type: String,
+        },
     }
 );
 
@@ -98,7 +82,6 @@ const songSchema: Schema = new mongoose.Schema(
 );
 
 export const Artist = mongoose.models?.Artist || mongoose.model("Artist", artistSchema);
-export const AlbumCover = mongoose.models?.AlbumCover || mongoose.model("AlbumCover", albumCoverSchema);
 export const Album = mongoose.models?.Album || mongoose.model("Album", albumSchema);
 export const Genre = mongoose.models?.Genre || mongoose.model("Genre", genreSchema);
 export const Song = mongoose.models?.Song || mongoose.model("Song", songSchema);

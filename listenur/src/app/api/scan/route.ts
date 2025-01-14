@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
+import { connectToDb } from "@/lib/utils";
+import { constructAlbumObj, constructArtistObj, constructGenreObj, constructSongObj } from "@/lib/constructors";
+import { Song, Genre, Album, Artist } from "@/lib/models";
+
+import {uint8ArrayToBase64} from 'uint8array-extras';
 import EventEmitter from "node:events";
 import path from "node:path";
+import { inspect } from 'util';
 
 // Ignores for missing type-declarations (could manually declare in future)
 // @ts-ignore
 import Walk from "@root/walk";
 // @ts-ignore
 import { parseFile } from "music-metadata";
-import { connectToDb } from "@/lib/utils";
-import { Song } from "@/lib/models";
 
+/* Simple JSON object declarations for document insertion */
 
 // Tracking states
 enum State {
@@ -106,13 +111,51 @@ async function walkDirectories(err: any, pathname: any, dirent: any, localPaths:
 async function addToDB(paths: Set<string>) {
     try {
         await connectToDb();
-        paths.forEach((path) => {
+        const batchSongs = [];
+        for (const path of paths) {
             try {
-                console.log("ADD:", path);
+                const metadata = await parseFile(path, { duration: true });
+                
+                // Create or find a Genre
+                const genreObj = constructGenreObj(metadata);
+                let genre = await Genre.findOne(genreObj);
+                if (!genre) {
+                    genre = new Genre(genreObj);
+                    await genre.save();
+                }
+
+                // Create or find an Artist
+                const artistObj = constructArtistObj(metadata);
+                let artist = await Artist.findOne(artistObj);
+                if (!artist) {
+                    artist = new Artist(artistObj);
+                    await artist.save();
+                }
+                
+                // Create or find an Album
+                let album = await Album.findOne({ title: metadata.common.album });
+                if (!album) {
+                    const albumObj = constructAlbumObj(metadata);
+
+                    console.log(albumObj);
+                    album = new Album(albumObj);
+                    await album.save();
+                }
+                
+                // Construct new song with matching ids
+                const songObj = constructSongObj(path, metadata, album._id, artist._id, genre._id);
+
+                // Push the new song to be batched
+                batchSongs.push(songObj);
             } catch (error) {
                 console.error(`Failed to add ${path} to DB!`);
             }
-        });
+        }
+
+        // Insert the batched songs added to the list
+        if (batchSongs.length > 0)
+            Song.collection.insertMany(batchSongs);
+
     } catch (error) {
         console.error("Failed to connect to DB!");
     };
@@ -122,13 +165,14 @@ async function addToDB(paths: Set<string>) {
 async function removeFromDB(paths: Set<string>) {
     try {
         await connectToDb();
-        paths.forEach((path) => {
+        for (const path of paths) {
             try {
-                console.log("REMOVE:", path);
+                const song = await Song.findOneAndDelete({ path: path });
+                song.save();
             } catch (error) {
                 console.error(`Failed to remove ${path} from DB!`);
             }
-        });
+        }
     } catch (error) {
         console.error("Failed to connect to DB!");
     };
@@ -147,9 +191,11 @@ async function scanAndUpdateDB() {
 
         // Get DB paths to quickly filter paths to add and remove
         let dbSongs;
+        let dbAlbum;
         try {
             await connectToDb();
             dbSongs = await Song.find(); // Fetch all songs
+            dbAlbum = await Album.findOne({title: "Smash"});
         } catch (error) {
             console.error("Failed to fetch songs!");
             return;
@@ -157,6 +203,8 @@ async function scanAndUpdateDB() {
 
         // Construct a set of paths from the db
         const dbPaths: Set<string> = new Set(dbSongs?.map(song => song.path));
+
+
 
         // Use set operations to determine 3 possibilities:
         // 1. If the path is in both dbPaths and localPaths: ignore path
