@@ -1,10 +1,9 @@
-import styles from "./audioBrowser.module.css";
-import Image from "next/image";
-import { FaPlay, FaBars } from "react-icons/fa";
 import ScanButton from "@/components/audioBrowser/scanButton/scanButton";
+import SongTab from "./songTab/songTab";
+import { calculateTime, findById } from "@/lib/utils";
 
 
-const AudioBrowser = async () => {
+const AudioBrowser = async ({ songs, albums }: { songs?: any; albums?: any }) => {
     return (
         <div className="bg-gray-700 rounded-lg shadow-lg p-6 flex flex-col h-full">
             {/* Header */}
@@ -33,46 +32,25 @@ const AudioBrowser = async () => {
 
             {/* List of Songs */}
             <ul className="max-h-[calc(100vh-20rem)] flex-1 overflow-y-auto space-y-2">
-                <li className="grid grid-cols-[90px_2fr_2fr_80px] gap-4 cursor-pointer items-center p-2 bg-gray-600 rounded hover:bg-teal-600 transition-colors">  
-
-                    <div className="flex items-center gap-2 text-white">
-                        {/* Play/Number (todo, add playlist/collection numbers) */}
-                        <FaPlay className="mx-2" />
-                        
-
-                        {/* Album Cover */}
-                        <Image 
-                        src="/album-covers/album-cover.jpg"
-                        alt="Thumbnail for album cover"
-                        className="rounded-sm"
-                        width={50}
-                        height={50}
+                {songs.map((song: any) => {
+                    
+                    const album = findById(albums, song.album._id) || { title: "Unknown Album", data: "", imageType: ""};
+                    
+                    return (
+                        <SongTab key={song._id} song={
+                                                    {
+                                                        title: song.title,
+                                                        artist: song.artist.name,
+                                                        album: album.title,
+                                                        albumType: album.imageType,
+                                                        albumImage: album.data,
+                                                        duration: calculateTime(song.duration),
+                                                    }} 
                         />
-                    </div>
+                    );
 
-                    {/* Title/Artist */}
-                    <div className="flex flex-col">
-                        <div>
-                            Beds are Burning
-                        </div>
-                        <div className="text-sm text-gray-300">
-                            Midnight Oil
-                        </div>
-                    </div>
-
-                    {/* Album Title */}
-                    <div className="text-gray-300">20,000 Watt R.S.L</div>
-
-                    {/* Duration */}
-                    <div className="text-gray-300 flex items-center gap-6">
-                        <div>
-                            3:45
-                        </div>
-                        <div>
-                            <FaBars />
-                        </div>
-                    </div>
-                </li>
+                    
+                })}
             </ul>
 
 

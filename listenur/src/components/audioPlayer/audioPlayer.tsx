@@ -1,4 +1,5 @@
 "use client";
+import { calculateTime } from "@/lib/utils";
 import styles from "./audioPlayer.module.css";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
@@ -51,14 +52,6 @@ const AudioPlayer = () => {
     const changePlayerCurrentTime = () => {
         progressBar.current.style.setProperty('--seek-before-width', `${progressBar.current.value / duration * 100}%`);
         setCurrentTime(progressBar.current.value);
-    };
-
-    const calculateTime = (secs: number) => {
-        const minutes = Math.floor(secs / 60);
-        const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-        const seconds = secs % 60;
-        const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-        return `${returnedMinutes}:${returnedSeconds}`;
     };
 
     return (
