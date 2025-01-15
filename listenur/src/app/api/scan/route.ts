@@ -136,8 +136,6 @@ async function addToDB(paths: Set<string>) {
                 let album = await Album.findOne({ title: metadata.common.album });
                 if (!album) {
                     const albumObj = constructAlbumObj(metadata);
-
-                    console.log(albumObj);
                     album = new Album(albumObj);
                     await album.save();
                 }
@@ -148,6 +146,7 @@ async function addToDB(paths: Set<string>) {
                 // Push the new song to be batched
                 batchSongs.push(songObj);
             } catch (error) {
+                console.error("Error:", error);
                 console.error(`Failed to add ${path} to DB!`);
             }
         }
