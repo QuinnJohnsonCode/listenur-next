@@ -4,9 +4,12 @@
 
 const getSongs = async (offset: number, limit: number) => {
     try {
-        //const url = ``
+        const url = `http://localhost:3000/api/songs/?offset=${offset}&limit=${limit}`;
+        const response = await fetch(url);
+        return response.json();
     } catch (error: unknown) {
         console.error(error);
+        throw new Error("Error fetching songs!");
     }
 };
 
