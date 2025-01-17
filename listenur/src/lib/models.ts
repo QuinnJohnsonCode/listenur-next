@@ -18,11 +18,7 @@ const albumSchema: Schema = new mongoose.Schema(
             unique: true,
         },
 
-        data: {
-            type: String,
-        },
-        
-        imageType: {
+        coverPath: {
             type: String,
         },
     }

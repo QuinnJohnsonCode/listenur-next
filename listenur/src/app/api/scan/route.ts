@@ -5,8 +5,10 @@ import { Song, Genre, Album, Artist } from "@/lib/models";
 
 import {uint8ArrayToBase64} from 'uint8array-extras';
 import EventEmitter from "node:events";
+import fs from "node:fs";
 import path from "node:path";
 import { inspect } from 'util';
+import mime from "mime";
 
 // Ignores for missing type-declarations (could manually declare in future)
 // @ts-ignore
@@ -112,9 +114,9 @@ async function addToDB(paths: Set<string>) {
     try {
         await connectToDb();
         const batchSongs = [];
-        for (const path of paths) {
+        for (const sPath of paths) {
             try {
-                const metadata = await parseFile(path, { duration: true });
+                const metadata = await parseFile(sPath, { duration: true });
                 
                 // Create or find a Genre
                 const genreObj = constructGenreObj(metadata);
@@ -135,19 +137,36 @@ async function addToDB(paths: Set<string>) {
                 // Create or find an Album
                 let album = await Album.findOne({ title: metadata.common.album });
                 if (!album) {
-                    const albumObj = constructAlbumObj(metadata);
+                    // Save the album cover art to public/album-covers/
+                    let imagePath: string = path.join("public", "album-covers");
+                    let dbPath: string = path.join("/album-covers");
+                    
+                    const picture = metadata.common.picture?.[0];
+                    if (picture) {
+                        const extension = mime.getExtension(picture.format);
+                        imagePath = path.join(imagePath, `${metadata.common.album}.${extension}`);
+                        dbPath = path.join(dbPath, `${metadata.common.album}.${extension}`)
+
+                        // Only write a new file if the album is not in the folder
+                        if (!fs.existsSync(imagePath))
+                            fs.writeFileSync(imagePath, Buffer.from(picture.data));
+                    } else {
+                        dbPath = path.join(dbPath, "unknown.jpg");
+                    }
+
+                    const albumObj = constructAlbumObj(dbPath, metadata);
                     album = new Album(albumObj);
                     await album.save();
                 }
                 
                 // Construct new song with matching ids
-                const songObj = constructSongObj(path, metadata, album._id, artist._id, genre._id);
+                const songObj = constructSongObj(sPath, metadata, album._id, artist._id, genre._id);
 
                 // Push the new song to be batched
                 batchSongs.push(songObj);
             } catch (error) {
                 console.error("Error:", error);
-                console.error(`Failed to add ${path} to DB!`);
+                console.error(`Failed to add ${sPath} to DB!`);
             }
         }
 

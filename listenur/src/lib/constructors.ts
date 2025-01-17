@@ -25,11 +25,9 @@ export function constructArtistObj(metadata: any) {
     };
 };
 
-export function constructAlbumObj(metadata: any) {
-    const picture = metadata.common.picture?.[0];
+export function constructAlbumObj(path: string, metadata: any) {
     return  {
         title: (metadata.common.album == undefined) ? "Unknown Album" : metadata.common.album,
-        data: picture ? uint8ArrayToBase64(picture.data) : undefined,
-        imageType: picture?.format,
+        coverPath: path,
     };
 };

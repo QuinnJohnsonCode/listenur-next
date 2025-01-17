@@ -12,7 +12,7 @@ const SongTab = ({ song }: { song?: any }) => {
 
                         {/* Album Cover */}
                         <Image 
-                        src={song.albumImage !== undefined && `data:${song.albumType};base64,${song.albumImage}` || "/file.svg"}
+                        src={song.coverPath !== undefined && `${song.coverPath}` || "/album-covers/unknown.jpg"}
                         alt="Thumbnail for album cover"
                         className="rounded-sm"
                         width={50}

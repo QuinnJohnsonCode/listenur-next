@@ -2,7 +2,7 @@ import { Song } from "@/lib/models";
 import { connectToDb } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
-// Route will return all Songs, no albums
+// Route will return relevant album information with corresponding songs
 export const GET = async () => {
     try {
       connectToDb();

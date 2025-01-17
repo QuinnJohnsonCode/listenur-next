@@ -2,8 +2,30 @@ import ScanButton from "@/components/audioBrowser/scanButton/scanButton";
 import SongTab from "./songTab/songTab";
 import { calculateTime, findById } from "@/lib/utils";
 
+const getSongs = async () => {
+    const res = await fetch(`http://localhost:3000/api/songs/`);
+  
+    if (!res.ok) {
+      throw new Error("Something went wrong");
+    }
+  
+    return res.json();
+};
 
-const AudioBrowser = async ({ songs, albums }: { songs?: any; albums?: any }) => {
+const getAlbums = async () => {
+    const res = await fetch(`http://localhost:3000/api/albums/`);
+  
+    if (!res.ok) {
+      throw new Error("Something went wrong");
+    }
+  
+    return res.json();
+};
+  
+const AudioBrowser = async () => {
+    const songs = await getSongs();
+    const albums = await getAlbums();
+    
     return (
         <div className="bg-gray-700 rounded-lg shadow-lg p-6 flex flex-col h-full">
             {/* Header */}
@@ -42,8 +64,7 @@ const AudioBrowser = async ({ songs, albums }: { songs?: any; albums?: any }) =>
                                                         title: song.title,
                                                         artist: song.artist.name,
                                                         album: album.title,
-                                                        albumType: album.imageType,
-                                                        albumImage: album.data,
+                                                        coverPath: album.coverPath,
                                                         duration: calculateTime(song.duration),
                                                     }} 
                         />
