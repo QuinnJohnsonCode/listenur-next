@@ -16,7 +16,7 @@ export const GET = async (req: any) => {
     const songs = await Song.find({}).populate("artist", "name").populate("album").populate("genre", "name");
     return NextResponse.json(songs.slice(Number(offset), Number(limit)));
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw new Error("Failed to fetch songs!");
   }
 };
