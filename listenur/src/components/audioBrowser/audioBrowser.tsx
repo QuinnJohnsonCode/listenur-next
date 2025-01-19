@@ -5,7 +5,7 @@ import getSongs from "@/lib/actions/getSongs";
 
 const INITIAL_NUMBER_OF_SONGS = 10;
 
-const AudioBrowser = async () => {
+const AudioBrowser = async ({ setCurrentSong }: { setCurrentSong: any }) => {
   const initialSongs = await getSongs(0, INITIAL_NUMBER_OF_SONGS);
 
   return (

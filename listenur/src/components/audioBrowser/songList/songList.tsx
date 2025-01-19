@@ -8,6 +8,7 @@ import SongTab from "@/components/audioBrowser/songTab/songTab";
 import { useState, useEffect } from "react";
 import getSongs from "@/lib/actions/getSongs";
 import { useInView } from "react-intersection-observer";
+import { useAudio } from "@/contexts/AudioProvider";
 
 const NUMBER_OF_SONGS_TO_FETCH = 10;
 
@@ -28,6 +29,8 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
     }
   }, [inView]);
 
+  const { setCurrentSong } = useAudio();
+
   return (
     <ul className="max-h-[calc(100vh-20rem)] flex-1 overflow-y-auto space-y-2">
       {songs.map((song: any) => {
@@ -35,12 +38,14 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
           <SongTab
             key={song._id}
             song={{
+              id: song._id,
               title: song.title,
               artist: song.artist.name,
               album: song.album.title,
               coverPath: song.album.coverPath,
               duration: calculateTime(song.duration),
             }}
+            onClick={() => setCurrentSong(song)}
           />
         );
       })}

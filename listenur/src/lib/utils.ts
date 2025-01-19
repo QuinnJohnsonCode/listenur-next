@@ -37,6 +37,11 @@ export const findById = (objects: any, id: any) => {
 };
 
 export const calculateTime = (secs: number) => {
+
+    if (secs === undefined) {
+        return undefined;
+    }
+
     const minutes = Math.floor(secs / 60);
     const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
     const seconds = Math.floor(secs % 60);

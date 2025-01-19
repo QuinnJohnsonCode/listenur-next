@@ -1,3 +1,5 @@
+import { Song } from "@/lib/models";
+import { connectToDb } from "@/lib/utils";
 import { createReadStream, promises, ReadStream } from "node:fs";
 import path from "node:path";
 
@@ -63,9 +65,29 @@ const streamFile = (filePath: string, start: number, end: number): ReadableStrea
 // Used to serve any HTTP GET requests to /api/stream/[id] with
 // an audio file matching the id within the database,
 // while using the range byte header provided by the request.
-export const GET = async (request: any) => {
+export const GET = async (request: any, { params }: { params: any }) => {
+    
+    // Get the id from the url path
+    const { id } = await params;
+
+    // Search for the path in the DB
+    let dbSong;
+    try {
+        connectToDb();
+        dbSong = await Song.find({ _id: id });
+    } catch (error: any) {
+        console.error(error);
+        console.error("Couldn't find id in DB!");
+
+        return new Response("ID provided invalid.", {
+            status: 404,
+        })
+    }
+
+
+    const dbPath = dbSong[0].path;
     const rangeHeader: any = request.headers.get("Range");
-    const filePath: any = path.join('src', 'songs', 'test_song.mp3');
+    const filePath: any = path.join(dbPath);
 
     let stats: any;
     // Check to see if the file exists

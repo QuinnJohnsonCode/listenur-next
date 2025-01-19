@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { FaPlay, FaBars } from "react-icons/fa";
 
-const SongTab = ({ song }: { song?: any }) => {
+const SongTab = ({ song, onClick }: { song?: any; onClick: any }) => {
   return (
-    <li className="group grid grid-cols-[90px_2fr_2fr_80px] gap-4 cursor-pointer items-center p-2 bg-gray-600 rounded hover:bg-teal-600 transition-colors">
+    <li
+      onClick={() => onClick(song)}
+      className="group grid grid-cols-[90px_2fr_2fr_80px] gap-4 cursor-pointer items-center p-2 bg-gray-600 rounded hover:bg-teal-600 transition-colors"
+    >
       <div className="flex items-center gap-2 text-white">
         {/* Play/Number (todo, add playlist/collection numbers) */}
         <FaPlay className="invisible group-hover:visible mx-2" />
