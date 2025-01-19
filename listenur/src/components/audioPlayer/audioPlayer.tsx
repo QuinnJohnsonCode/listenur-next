@@ -4,8 +4,8 @@ import styles from "./audioPlayer.module.css";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
-import { IoPlaySkipBackSharp, IoPlaySkipForwardSharp } from "react-icons/io5";
 import { useAudio } from "@/contexts/AudioProvider";
+import { MdOutlineRotateLeft, MdOutlineRotateRight } from "react-icons/md";
 
 const AudioPlayer = () => {
   // Shared currentSong state (contains a song object)
@@ -21,12 +21,24 @@ const AudioPlayer = () => {
   const progressBar: any = useRef();
   const animationRef: any = useRef();
 
-  // Set initial duration/progress bar
   useEffect(() => {
-    const seconds = Math.floor(audioPlayer.current.duration);
-    setDuration(seconds);
-    progressBar.current.max = seconds;
-  }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
+    handleSongChange();
+  }, [currentSong]);
+
+  // Called when currentSong changes
+  const handleSongChange = () => {
+    if (currentSong) {
+      const seconds = Math.floor(Number(currentSong.duration) || 0);
+      setDuration(seconds);
+      progressBar.current.max = seconds;
+
+      console.log(duration);
+
+      setIsPlaying(true);
+      audioPlayer.current.play();
+      animationRef.current = requestAnimationFrame(whilePlaying);
+    }
+  };
 
   const isLoaded = () => {
     return currentSong !== null;
@@ -67,11 +79,17 @@ const AudioPlayer = () => {
 
   // Modifies progress bar's position
   const changePlayerCurrentTime = () => {
-    progressBar.current.style.setProperty(
-      "--seek-before-width",
-      `${(progressBar.current.value / duration) * 100}%`
-    );
-    setCurrentTime(progressBar.current.value);
+    const currentTime = progressBar.current.value;
+    setCurrentTime(currentTime);
+  };
+
+  const skipBackFifteen = () => {
+    progressBar.current.value = Number(Number(progressBar.current.value) - 15);
+    changeRange();
+  };
+  const skipForwardFifteen = () => {
+    progressBar.current.value = Number(Number(progressBar.current.value) + 15);
+    changeRange();
   };
 
   return (
@@ -118,7 +136,10 @@ const AudioPlayer = () => {
       {/* Control Buttons (skip, play/pause) */}
       <div className="w-full flex gap-5 items-center justify-center">
         {/* Skip Backwards */}
-        <IoPlaySkipBackSharp className="h-8 w-8 hover:text-teal-600 cursor-pointer transition-colors" />
+        <MdOutlineRotateLeft
+          onClick={skipBackFifteen}
+          className="h-8 w-8 hover:text-teal-600 cursor-pointer transition-colors"
+        />
 
         {/* Play/Pause */}
         <button onClick={togglePlayPause}>
@@ -130,7 +151,10 @@ const AudioPlayer = () => {
         </button>
 
         {/* Skip Forwards */}
-        <IoPlaySkipForwardSharp className="h-8 w-8 hover:text-teal-600 cursor-pointer transition-colors" />
+        <MdOutlineRotateRight
+          onClick={skipForwardFifteen}
+          className="h-8 w-8 hover:text-teal-600 cursor-pointer transition-colors"
+        />
       </div>
 
       {/* Player Progress */}
