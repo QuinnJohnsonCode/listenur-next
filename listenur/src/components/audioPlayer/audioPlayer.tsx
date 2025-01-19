@@ -32,8 +32,6 @@ const AudioPlayer = () => {
       setDuration(seconds);
       progressBar.current.max = seconds;
 
-      console.log(duration);
-
       setIsPlaying(true);
       audioPlayer.current.play();
       animationRef.current = requestAnimationFrame(whilePlaying);
