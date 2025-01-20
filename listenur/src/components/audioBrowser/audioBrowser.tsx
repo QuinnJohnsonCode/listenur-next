@@ -1,11 +1,10 @@
 import ScanButton from "@/components/audioBrowser/scanButton/scanButton";
-import FilterHeadings from "@/components/audioBrowser/filterHeadings/filterHeadings";
 import SongList from "@/components/audioBrowser/songList/songList";
 import getSongs from "@/lib/actions/getSongs";
 
-const INITIAL_NUMBER_OF_SONGS = 10;
+const INITIAL_NUMBER_OF_SONGS = 20;
 
-const AudioBrowser = async ({ setCurrentSong }: { setCurrentSong: any }) => {
+const AudioBrowser = async () => {
   const initialSongs = await getSongs(0, INITIAL_NUMBER_OF_SONGS);
 
   return (
@@ -15,9 +14,6 @@ const AudioBrowser = async ({ setCurrentSong }: { setCurrentSong: any }) => {
         <h2 className="text-2xl font-semibold mb-4 text-teal-300">Browse</h2>
         <ScanButton />
       </div>
-
-      {/* Table Headings */}
-      <FilterHeadings />
 
       {/* List of Songs */}
       <SongList initialSongs={initialSongs} />

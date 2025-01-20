@@ -2,9 +2,9 @@
 
 'use server';
 
-const getSongs = async (offset: number, limit: number) => {
+const getSongs = async (offset: number, limit: number, filter: string = "none", order: string = "asc") => {
     try {
-        const url = `http://localhost:3000/api/songs/?offset=${offset}&limit=${limit}`;
+        const url = `http://localhost:3000/api/songs/?filter=${filter}&order=${order}&offset=${offset}&limit=${limit}`;
         const response = await fetch(url);
         return response.json();
     } catch (error: unknown) {
