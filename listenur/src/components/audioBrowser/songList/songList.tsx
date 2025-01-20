@@ -129,7 +129,7 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
         </div>
       </div>
 
-      <ul className="max-h-[calc(100vh-20rem)] flex-1 overflow-y-auto space-y-2">
+      <ul className="max-h-[calc(100vh-22rem)] flex-1 overflow-y-auto space-y-2">
         {songs.map((song: any) => {
           return (
             <SongTab
