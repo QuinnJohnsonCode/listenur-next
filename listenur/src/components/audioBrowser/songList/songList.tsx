@@ -11,6 +11,7 @@ import { useInView } from "react-intersection-observer";
 import { useAudio } from "@/contexts/AudioProvider";
 import { IoIosRefresh } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
+import debounce from "lodash.debounce";
 
 const NUMBER_OF_SONGS_TO_FETCH = 20;
 
@@ -25,6 +26,7 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
   const [filter, setFilter] = useState("none");
   const [order, setOrder] = useState("asc");
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hitBottom, setHitBottom] = useState(false);
 
@@ -41,7 +43,7 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
       NUMBER_OF_SONGS_TO_FETCH,
       filter,
       order,
-      search
+      debouncedSearch
     );
 
     if (apiSongs.length < NUMBER_OF_SONGS_TO_FETCH) {
@@ -77,10 +79,18 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
     setFilter(newFilter);
   };
 
+  // Debounce search input to avoid rapid queries
+  useEffect(() => {
+    const handler = debounce(() => setDebouncedSearch(search), 300); // Delay 300ms
+    handler();
+
+    return () => handler.cancel();
+  }, [search]);
+
   // Clear songs any time filter, order, or search changes
   useEffect(() => {
     clearSongs();
-  }, [filter, order, search]);
+  }, [filter, order, debouncedSearch]);
 
   // Infinite scroll, if reference object (ref) is on the screen, fetch more songs
   useEffect(() => {
