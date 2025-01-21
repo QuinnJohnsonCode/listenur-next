@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white flex flex-col min-h-screen">
+      <body className="select-none bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white flex flex-col min-h-screen">
         {/* Header */}
         <Header />
 
