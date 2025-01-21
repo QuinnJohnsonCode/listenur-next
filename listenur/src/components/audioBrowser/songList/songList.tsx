@@ -5,12 +5,13 @@
 
 import { calculateTime } from "@/lib/utils";
 import SongTab from "@/components/audioBrowser/songTab/songTab";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import getSongs from "@/lib/actions/getSongs";
 import { useInView } from "react-intersection-observer";
 import { useAudio } from "@/contexts/AudioProvider";
 import { IoIosRefresh } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
+// @ts-ignore
 import debounce from "lodash.debounce";
 
 const NUMBER_OF_SONGS_TO_FETCH = 20;
@@ -68,6 +69,7 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
     setIsLoading(false);
   };
 
+  // Changes the filter and ordering based on newFilter and previous order
   const handleFilterChange = (newFilter: string) => {
     if (filter === newFilter && order === "asc") {
       setOrder("desc");
@@ -167,22 +169,23 @@ const SongList = ({ initialSongs }: { initialSongs?: any }) => {
 
       {/* Main list holding SongTab objects */}
       <ul className="max-h-[calc(100vh-24rem)] flex-1 overflow-y-auto space-y-2">
-        {songs.map((song: any) => {
-          return (
-            <SongTab
-              key={song._id}
-              song={{
-                id: song._id,
-                title: song.title,
-                artist: song.artist.name,
-                album: song.album.title,
-                coverPath: song.album.coverPath,
-                duration: calculateTime(song.duration),
-              }}
-              onClick={() => setCurrentSong(song)}
-            />
-          );
-        })}
+        {songs.length > 0 &&
+          songs.map((song: any, index: number) => {
+            return (
+              <SongTab
+                key={`${song._id}-${index}`} // Create a unique composite key
+                song={{
+                  id: song._id,
+                  title: song.title,
+                  artist: song.artist.name,
+                  album: song.album.title,
+                  coverPath: song.album.coverPath,
+                  duration: calculateTime(song.duration),
+                }}
+                onClick={() => setCurrentSong(song)}
+              />
+            );
+          })}
 
         {/* Infinite scroll loading reference */}
         {!hitBottom && (
