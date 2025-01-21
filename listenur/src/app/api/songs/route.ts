@@ -10,21 +10,19 @@ export const GET = async (req: any) => {
   const limit = searchParams.get("limit") || "20";
   const filter = searchParams.get("filter") || "none";
   const order = searchParams.get("order") || "asc";
+  const searchText = searchParams.get("search") || "";
 
   try {
     await connectToDb();
 
     const sortOrder = order === "asc" ? 1 : -1;
-
-    // const songs = await Song.find(query)
-    //   .populate("artist", "name")
-    //   .populate("album")
-    //   .populate("genre", "name")
-    //   .sort({ title: -1, _id: 1 })
-    //   .skip(Number(offset))
-    //   .limit(Number(limit));
-
-    const query: any = filter !== "none" ? { [filter]: { $exists: true } } : {};
+    const query: any =
+      filter !== "none"
+        ? {
+            [filter]: { $exists: true },
+            title: { $regex: searchText, $options: "i" },
+          }
+        : { title: { $regex: searchText, $options: "i" } };
 
     let sort: { [key: string]: 1 | -1 } = {};
     if (filter === "duration") {
